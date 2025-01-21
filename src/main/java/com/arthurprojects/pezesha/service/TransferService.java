@@ -1,26 +1,27 @@
 package com.arthurprojects.pezesha.service;
 
 import com.arthurprojects.pezesha.dto.TransferDTO;
-import com.arthurprojects.pezesha.entity.Transfer;
+import com.arthurprojects.pezesha.dto.TransferResponseDTO;
 
 import java.util.List;
 
 public interface TransferService {
+
     // Create a new transfer
-    Transfer createTransfer(TransferDTO transferDTO);
+    TransferResponseDTO createTransfer(TransferDTO transferDTO);
 
     // Get transfer by ID
-    Transfer getTransferById(Long id);
+    TransferResponseDTO getTransferById(Long id);
 
     // Get all transfers
-    List<Transfer> getAllTransfers();
+    List<TransferResponseDTO> getAllTransfers();
 
     // Get transfers by source account ID
-    List<Transfer> getTransfersBySourceAccountId(Long accountId);
+    List<TransferResponseDTO> getTransfersBySourceAccountId(Long accountId);
 
     // Get transfers by destination account ID
-    List<Transfer> getTransfersByDestinationAccountId(Long accountId);
+    List<TransferResponseDTO> getTransfersByDestinationAccountId(Long accountId);
 
     // Get all transfers for an account (both sent and received)
-    List<Transfer> getAllTransfersByAccountId(Long accountId);
+    List<TransferResponseDTO> getAllTransfersByAccountId(Long accountId);
 }

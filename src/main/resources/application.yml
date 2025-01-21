@@ -1,0 +1,51 @@
+# Spring Boot application name
+spring:
+  application:
+    name: pezesha
+
+  # H2 Database Configuration
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: ""
+    jpa:
+      hibernate:
+        ddl-auto: update  # Automatically update the schema (use create-drop for testing)
+      database-platform: org.hibernate.dialect.H2Dialect
+    # Enable the H2 console for debugging purposes
+    console:
+      enabled: true
+      path: /h2-console  # You can access the console at localhost:8080/h2-console
+
+  # Spring JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: update  # This will automatically create and update tables (use create-drop in dev mode)
+    show-sql: true  # Show SQL queries in the logs for debugging purposes
+
+# JWT Configuration
+application:
+  security:
+    jwt:
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970  # JWT secret key for signing tokens
+      expiration: 86400000  # JWT expiration time in milliseconds (1 day)
+      refresh-token:
+        expiration: 604800000  # Refresh token expiration time in milliseconds (7 days)
+
+# Springdoc OpenAPI (Swagger) Configuration
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+    filter: true
+
+# H2 Console Access Configuration
+# Optional: If you want to set custom security configurations for accessing the H2 console in production
+security:
+  basic:
+    enabled: true  # Enable basic authentication for the H2 console
+

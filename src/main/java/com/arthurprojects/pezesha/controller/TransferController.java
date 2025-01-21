@@ -1,7 +1,7 @@
 package com.arthurprojects.pezesha.controller;
 
 import com.arthurprojects.pezesha.dto.TransferDTO;
-import com.arthurprojects.pezesha.entity.Transfer;
+import com.arthurprojects.pezesha.dto.TransferResponseDTO;
 import com.arthurprojects.pezesha.service.TransferService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,15 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/transfers")
+@RequestMapping("/api/v1/transfers")
 @RequiredArgsConstructor
 @Tag(name = "Transfer Management", description = "APIs for managing money transfers between accounts")
 public class TransferController {
     private final TransferService transferService;
 
-    /*public TransferController(TransferService transferService) {
-        this.transferService = transferService;
-    } **/
     @Operation(
             summary = "Create new transfer",
             description = "Initiates a money transfer between two accounts"
@@ -37,7 +34,7 @@ public class TransferController {
                     description = "Transfer completed successfully",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = Transfer.class)
+                            schema = @Schema(implementation = TransferResponseDTO.class)
                     )
             ),
             @ApiResponse(
@@ -59,7 +56,7 @@ public class TransferController {
     })
 
     @PostMapping
-    public ResponseEntity<Transfer> createTransfer(@RequestBody @Valid TransferDTO transferDTO) {
+    public ResponseEntity<TransferResponseDTO> createTransfer(@RequestBody @Valid TransferDTO transferDTO) {
         return ResponseEntity.ok(transferService.createTransfer(transferDTO));
     }
 }

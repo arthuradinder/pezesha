@@ -1,7 +1,7 @@
 package com.arthurprojects.pezesha.controller;
 
 import com.arthurprojects.pezesha.dto.AccountDTO;
-import com.arthurprojects.pezesha.entity.Account;
+import com.arthurprojects.pezesha.dto.AccountResponseDTO;
 import com.arthurprojects.pezesha.service.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
  * REST controller for managing accounts.
  */
 @RestController
-@RequestMapping("/api/accounts")
+@RequestMapping("/api/v1/accounts")
 @RequiredArgsConstructor
 @Tag(name = "Account Management", description = "APIs for managing bank accounts")
 public class AccountController {
@@ -31,7 +30,7 @@ public class AccountController {
      * Creates a new account.
      *
      * @param accountDTO the account data transfer object containing account details.
-     * @return ResponseEntity containing the created Account and HTTP status 201 (Created).
+     * @return ResponseEntity containing the created AccountResponseDTO and HTTP status 201 (Created).
      */
     @Operation(
             summary = "Create a new account",
@@ -43,7 +42,7 @@ public class AccountController {
                     description = "Account created successfully",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = Account.class)
+                            schema = @Schema(implementation = AccountResponseDTO.class)
                     )
             ),
             @ApiResponse(
@@ -56,8 +55,8 @@ public class AccountController {
             )
     })
     @PostMapping
-    public ResponseEntity<Account> createAccount(@RequestBody @Valid AccountDTO accountDTO) {
-        Account createdAccount = accountService.createAccount(accountDTO);
+    public ResponseEntity<AccountResponseDTO> createAccount(@RequestBody @Valid AccountDTO accountDTO) {
+        AccountResponseDTO createdAccount = accountService.createAccount(accountDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdAccount);
     }
 
@@ -65,7 +64,7 @@ public class AccountController {
      * Retrieves an account by its ID.
      *
      * @param id the ID of the account to retrieve.
-     * @return ResponseEntity containing the retrieved Account and HTTP status 200 (OK).
+     * @return ResponseEntity containing the retrieved AccountResponseDTO and HTTP status 200 (OK).
      */
     @Operation(
             summary = "Get account by ID",
@@ -77,7 +76,7 @@ public class AccountController {
                     description = "Account found successfully",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = Account.class)
+                            schema = @Schema(implementation = AccountResponseDTO.class)
                     )
             ),
             @ApiResponse(
@@ -90,8 +89,8 @@ public class AccountController {
             )
     })
     @GetMapping("/{id}")
-    public ResponseEntity<Account> getAccount(@PathVariable Long id) {
-        Account account = accountService.getAccountById(id);
+    public ResponseEntity<AccountResponseDTO> getAccount(@PathVariable Long id) {
+        AccountResponseDTO account = accountService.getAccountById(id);
         return ResponseEntity.ok(account);
     }
 }

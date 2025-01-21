@@ -2,8 +2,8 @@ package com.arthurprojects.pezesha.service;
 
 
 import com.arthurprojects.pezesha.dto.AccountDTO;
+import com.arthurprojects.pezesha.dto.AccountResponseDTO;
 import com.arthurprojects.pezesha.entity.Account;
-import jakarta.validation.Valid;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,33 +17,37 @@ public interface AccountService {
      * Creates a new account.
      *
      * @param accountDTO the account data transfer object containing details for the new account.
-     * @return the created Account entity.
+     * @return the created AccountResponseDTO.
      */
-    Account createAccount(AccountDTO accountDTO);
+    AccountResponseDTO createAccount(AccountDTO accountDTO);
 
     /**
      * Retrieves an account by its ID.
      *
      * @param id the ID of the account to retrieve.
-     * @return the Account entity.
+     * @return the AccountResponseDTO.
      */
-    Account getAccountById(Long id);
+    AccountResponseDTO getAccountById(Long id);
+
+    Account getAccountEntityById(Long id);
+
+    void saveAccount(Account account);
 
     /**
      * Retrieves all accounts.
      *
-     * @return a list of all Account entities.
+     * @return a list of all AccountResponseDTOs.
      */
-    List<Account> getAllAccounts();
+    List<AccountResponseDTO> getAllAccounts();
 
     /**
      * Updates the balance of an account.
      *
      * @param accountId  the ID of the account to update.
      * @param newBalance the new balance to set.
-     * @return the updated Account entity.
+     * @return the updated AccountResponseDTO.
      */
-    Account updateBalance(Long accountId, BigDecimal newBalance);
+    AccountResponseDTO updateBalance(Long accountId, BigDecimal newBalance);
 
     /**
      * Deletes an account by its ID.

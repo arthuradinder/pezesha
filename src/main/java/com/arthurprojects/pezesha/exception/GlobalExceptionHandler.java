@@ -1,73 +1,73 @@
 package com.arthurprojects.pezesha.exception;
 
-import com.arthurprojects.pezesha.util.ErrorResponseBuilder;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.HttpStatus;
+import com.arthurprojects.pezesha.common.errors.ErrorResponse;
+import com.arthurprojects.pezesha.common.errors.ErrorType;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.security.auth.login.AccountNotFoundException;
-import java.util.stream.Collectors;
+import java.time.LocalDateTime;
 
-@RestControllerAdvice
+/**
+ * Global exception handler for handling custom exceptions and sending structured error responses.
+ */
+@ControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(AccountNotFoundException.class)
-    public ResponseEntity<Error> handleAccountNotFoundException(
-            AccountNotFoundException ex,
-            HttpServletRequest request) {
 
-        return ErrorResponseBuilder.buildErrorResponse(
-                HttpStatus.NOT_FOUND,
-                ex.getMessage(),
-                "The requested account could not be found in the system",
-                request
-        );
-    }
-
+    /**
+     * Handles InsufficientBalanceException and returns a detailed response with a BAD_REQUEST status.
+     *
+     * @param ex The exception thrown.
+     * @return A ResponseEntity containing the error message and HTTP status.
+     */
     @ExceptionHandler(InsufficientBalanceException.class)
-    public ResponseEntity<Error> handleInsufficientBalanceException(
-            InsufficientBalanceException ex,
-            HttpServletRequest request) {
-
-        return ErrorResponseBuilder.buildErrorResponse(
-                HttpStatus.BAD_REQUEST,
+    public ResponseEntity<ErrorResponse> handleInsufficientBalanceException(InsufficientBalanceException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                ErrorType.VALIDATION.getStatusCode(),
                 ex.getMessage(),
-                "The account has insufficient balance for this transaction",
-                request
+                ErrorType.VALIDATION.getDescription(),
+                ErrorType.VALIDATION,
+                LocalDateTime.now()
         );
+        return new ResponseEntity<>(errorResponse, HttpStatusCode.valueOf(ErrorType.VALIDATION.getStatusCode()));
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Error> handleValidationExceptions(
-            MethodArgumentNotValidException ex,
-            HttpServletRequest request) {
-
-        String details = ex.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                .collect(Collectors.joining(", "));
-
-        return ErrorResponseBuilder.buildErrorResponse(
-                HttpStatus.BAD_REQUEST,
-                "Validation failed",
-                details,
-                request
+    /**
+     * Handles ResourceNotFoundException and returns a detailed response with a NOT_FOUND status.
+     *
+     * @param ex The exception thrown.
+     * @return A ResponseEntity containing the error message and HTTP status.
+     */
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                ErrorType.NOT_FOUND.getStatusCode(),
+                ex.getMessage(),
+                ErrorType.NOT_FOUND.getDescription(),
+                ErrorType.NOT_FOUND,
+                LocalDateTime.now()
         );
+        return new ResponseEntity<>(errorResponse, HttpStatusCode.valueOf(ErrorType.NOT_FOUND.getStatusCode()));
     }
 
+    /**
+     * Handles all other exceptions and returns a generic error message with an INTERNAL_SERVER_ERROR status.
+     *
+     * @param ex The exception thrown.
+     * @return A ResponseEntity containing a generic error message and HTTP status.
+     */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Error> handleGenericException(
-            Exception ex,
-            HttpServletRequest request) {
-
-        return ErrorResponseBuilder.buildErrorResponse(
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                "An unexpected error occurred",
+    public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                ErrorType.UNEXPECTED.getStatusCode(),
+                "An unexpected error occurred.",
                 ex.getMessage(),
-                request
+                ErrorType.UNEXPECTED,
+                LocalDateTime.now()
         );
+        return new ResponseEntity<>(errorResponse, HttpStatusCode.valueOf(ErrorType.UNEXPECTED.getStatusCode()));
     }
+
+
 }
