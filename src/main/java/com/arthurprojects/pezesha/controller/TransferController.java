@@ -13,9 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/transfers")
-@RequiredArgsConstructor
 public class TransferController {
     private final TransferService transferService;
+
+    public TransferController(TransferService transferService) {
+        this.transferService = transferService;
+    }
 
     @PostMapping
     public ResponseEntity<Transfer> createTransfer(@RequestBody @Valid TransferDTO transferDTO) {

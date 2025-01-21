@@ -8,25 +8,64 @@ import jakarta.validation.Valid;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Service interface for managing account operations.
+ */
 public interface AccountService {
-    // Create a new account
+
+    /**
+     * Creates a new account.
+     *
+     * @param accountDTO the account data transfer object containing details for the new account.
+     * @return the created Account entity.
+     */
     Account createAccount(AccountDTO accountDTO);
 
-    // Get account by ID
+    /**
+     * Retrieves an account by its ID.
+     *
+     * @param id the ID of the account to retrieve.
+     * @return the Account entity.
+     */
     Account getAccountById(Long id);
 
-    // Get all accounts
+    /**
+     * Retrieves all accounts.
+     *
+     * @return a list of all Account entities.
+     */
     List<Account> getAllAccounts();
 
-    // Update account balance
+    /**
+     * Updates the balance of an account.
+     *
+     * @param accountId  the ID of the account to update.
+     * @param newBalance the new balance to set.
+     * @return the updated Account entity.
+     */
     Account updateBalance(Long accountId, BigDecimal newBalance);
 
-    // Delete account
+    /**
+     * Deletes an account by its ID.
+     *
+     * @param id the ID of the account to delete.
+     */
     void deleteAccount(Long id);
 
-    // Check if account exists
+    /**
+     * Checks if an account exists by its ID.
+     *
+     * @param id the ID of the account to check.
+     * @return true if the account exists, false otherwise.
+     */
     boolean accountExists(Long id);
 
-    // Check if account has sufficient balance
+    /**
+     * Checks if an account has sufficient balance.
+     *
+     * @param accountId the ID of the account to check.
+     * @param amount    the amount to compare against the account balance.
+     * @return true if the account has sufficient balance, false otherwise.
+     */
     boolean hasSufficientBalance(Long accountId, BigDecimal amount);
 }
